@@ -10,6 +10,7 @@ import (
 	"time"
 	"sync"
 	"io/ioutil"
+	"strings"
 )
 
 func main() {
@@ -54,8 +55,12 @@ func main() {
 
 	// Formatting url
 	for data.Scan() {
-		uncheckedSubdomainList = append(uncheckedSubdomainList, "https://" + data.Text())
-		uncheckedSubdomainList = append(uncheckedSubdomainList, "http://" + data.Text())
+		if (strings.Contains(data.Text(), "https://") || strings.Contains(data.Text(), "http://")) {
+			uncheckedSubdomainList = append(uncheckedSubdomainList, data.Text())
+		} else {
+			uncheckedSubdomainList = append(uncheckedSubdomainList, "https://" + data.Text())
+			uncheckedSubdomainList = append(uncheckedSubdomainList, "http://" + data.Text())
+		}
 	}
 
 	var wg sync.WaitGroup
